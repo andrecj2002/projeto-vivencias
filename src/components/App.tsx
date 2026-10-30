@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { jobs } from "./dadosServicosComponent";
+import { useEffect, useState } from "react";import { jobs } from "./dadosServicosComponent";
 import type { JobRequest } from "./dadosServicosComponent";
 import InterfaceComponent from "./interfaceComponent";
 import FiltrarComponent from "./filtrarComponent";
@@ -7,6 +6,7 @@ import FiltrarComponent from "./filtrarComponent";
 export default function App() {
   const [currentJobs, setCurrentJobs] = useState<JobRequest[]>(jobs);
   const [selectedCity, setSelectedCity] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
 
   // Calculado a partir da lista original, por isso uma cidade não desaparece do filtro quando é aceite o último pedido dela.
@@ -30,6 +30,7 @@ for (const job of jobs) {
     setCurrentJobs(newList);
   }
 
+  // Filtro para cidade selecionada
     const visibleJobs: JobRequest[] = [];
   for (const job of currentJobs) {
     if (selectedCity === "" || job.city === selectedCity) {
@@ -37,6 +38,29 @@ for (const job of jobs) {
     }
   }
 
+  // Mensagem a mostrar quando não há pedidos visíveis
+    let emptyMessage: string = "";
+  if (currentJobs.length === 0) {
+    emptyMessage = "Não há pedidos disponíveis.";
+  } else if (visibleJobs.length === 0) {
+    emptyMessage = "Não há pedidos em " + selectedCity + ".";
+  }
+
+  // Carregar
+    useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+    if (loading) {
+    return (
+      <main>
+        <p>A carregar...</p>
+      </main>
+    );
+  }
 
   return (
     <main>
@@ -45,11 +69,15 @@ for (const job of jobs) {
         selectedCity={selectedCity}
         onChange={setSelectedCity}
       />
-      <ul>
-        {visibleJobs.map((job) => (
-          <InterfaceComponent key={job.id} job={job} onAccept={accept} />
-        ))}
-      </ul>
+      {visibleJobs.length === 0 ? (
+        <p>{emptyMessage}</p>
+      ) : (
+        <ul>
+          {visibleJobs.map((job) => (
+            <InterfaceComponent key={job.id} job={job} onAccept={accept} />
+          ))}
+        </ul>
+      )}
     </main>
   );
 }
