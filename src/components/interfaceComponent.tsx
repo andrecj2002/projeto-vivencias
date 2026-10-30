@@ -1,6 +1,5 @@
 import type { JobRequest } from "./dadosServicosComponent";
 
-
 type Props = {
   job: JobRequest;
   onAccept: (id: string) => void;
@@ -9,7 +8,6 @@ type Props = {
 type FormatPrice = (cents: number) => string;
 type FormatDateTime = (iso: string) => string;
 type FormatDuration = (totalMinutes: number) => string;
-
 
 // 4500 -> "45,00 €"
 const formatPrice: FormatPrice = (cents) => {

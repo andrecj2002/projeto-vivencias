@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";import { jobs } from "./dadosServicosComponent";
+import { useEffect, useState } from "react";
+import { jobs } from "./dadosServicosComponent";
 import type { JobRequest } from "./dadosServicosComponent";
 import InterfaceComponent from "./interfaceComponent";
 import FiltrarComponent from "./filtrarComponent";
@@ -8,14 +9,13 @@ export default function App() {
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
-
   // Calculado a partir da lista original, por isso uma cidade não desaparece do filtro quando é aceite o último pedido dela.
   const cities: string[] = [];
-for (const job of jobs) {
-  if (!cities.includes(job.city)) {
-    cities.push(job.city);
+  for (const job of jobs) {
+    if (!cities.includes(job.city)) {
+      cities.push(job.city);
+    }
   }
-}
 
   // Remove da lista o pedido com o id recebido
   function accept(id: string): void {
@@ -31,7 +31,7 @@ for (const job of jobs) {
   }
 
   // Filtro para cidade selecionada
-    const visibleJobs: JobRequest[] = [];
+  const visibleJobs: JobRequest[] = [];
   for (const job of currentJobs) {
     if (selectedCity === "" || job.city === selectedCity) {
       visibleJobs.push(job);
@@ -39,7 +39,7 @@ for (const job of jobs) {
   }
 
   // Mensagem a mostrar quando não há pedidos visíveis
-    let emptyMessage: string = "";
+  let emptyMessage: string = "";
   if (currentJobs.length === 0) {
     emptyMessage = "Não há pedidos disponíveis.";
   } else if (visibleJobs.length === 0) {
@@ -47,14 +47,14 @@ for (const job of jobs) {
   }
 
   // Carregar
-    useEffect(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
-    if (loading) {
+  if (loading) {
     return (
       <main>
         <p>A carregar...</p>

@@ -4,7 +4,11 @@ interface Props {
   onChange: (city: string) => void;
 }
 
-export default function FiltrarComponent({ cities, selectedCity, onChange }: Props) {
+export default function FiltrarComponent({
+  cities,
+  selectedCity,
+  onChange,
+}: Props) {
   return (
     <div>
       <label htmlFor="city">Cidade: </label>
