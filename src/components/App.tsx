@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+import type { JSX } from "react";
 import { jobs } from "./dadosServicosComponent";
 import type { JobRequest } from "./dadosServicosComponent";
 import InterfaceComponent from "./interfaceComponent";
 import FiltrarComponent from "./filtrarComponent";
 
-export default function App() {
+export default function App(): JSX.Element {
   const [currentJobs, setCurrentJobs] = useState<JobRequest[]>(jobs);
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
@@ -48,10 +49,10 @@ export default function App() {
 
   // Carregar
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const timer: ReturnType<typeof setTimeout> = setTimeout((): void => {
       setLoading(false);
     }, 1000);
-    return () => clearTimeout(timer);
+    return (): void => clearTimeout(timer);
   }, []);
 
   if (loading) {
@@ -92,7 +93,7 @@ export default function App() {
                 </tr>
               </thead>
               <tbody>
-                {visibleJobs.map((job) => (
+                {visibleJobs.map((job: JobRequest) => (
                   <InterfaceComponent key={job.id} job={job} onAccept={accept} />
                 ))}
               </tbody>
