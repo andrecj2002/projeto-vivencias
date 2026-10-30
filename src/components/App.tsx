@@ -9,6 +9,7 @@ export default function App(): JSX.Element {
   const [currentJobs, setCurrentJobs] = useState<JobRequest[]>(jobs);
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
+  const [successMessage, setSuccessMessage] = useState<string>("");
 
   // Calculado a partir da lista original, por isso uma cidade não desaparece do filtro quando é aceite o último pedido dela.
   const cities: string[] = [];
@@ -20,6 +21,9 @@ export default function App(): JSX.Element {
 
   // Remove da lista o pedido com o id recebido
   function accept(id: string): void {
+    const acceptedJob: JobRequest | undefined = currentJobs.find(
+      (job: JobRequest) => job.id === id,
+    );
     const newList: JobRequest[] = [];
 
     for (const job of currentJobs) {
@@ -29,6 +33,12 @@ export default function App(): JSX.Element {
     }
 
     setCurrentJobs(newList);
+
+    if (acceptedJob !== undefined) {
+      setSuccessMessage(
+        `Pedido de ${acceptedJob.service} em ${acceptedJob.city} aceite com sucesso!`,
+      );
+    }
   }
 
   // Filtro para cidade selecionada
@@ -55,6 +65,17 @@ export default function App(): JSX.Element {
     return (): void => clearTimeout(timer);
   }, []);
 
+  // Esconde o aviso de sucesso ao fim de 3 segundos
+  useEffect(() => {
+    if (successMessage === "") return;
+
+    const timer: ReturnType<typeof setTimeout> = setTimeout((): void => {
+      setSuccessMessage("");
+    }, 3000);
+
+    return (): void => clearTimeout(timer);
+  }, [successMessage]);
+
   if (loading) {
     return (
       <main className="min-h-screen w-full flex items-center justify-center bg-white">
@@ -70,6 +91,18 @@ export default function App(): JSX.Element {
           Pedidos de serviço
         </h1>
 
+        {/* Espaço reservado, para o layout não saltar quando o aviso aparece */}
+        <div className="h-14">
+          {successMessage !== "" && (
+            <div
+              className="p-4 text-sm text-green-800 rounded-lg bg-green-100"
+              role="alert"
+            >
+              <span className="font-medium">Sucesso!</span> {successMessage}
+            </div>
+          )}
+        </div>
+
         <FiltrarComponent
           cities={cities}
           selectedCity={selectedCity}
@@ -83,18 +116,36 @@ export default function App(): JSX.Element {
             <table className="w-full text-left table-auto min-w-max">
               <thead>
                 <tr className="text-sm font-normal leading-none text-slate-500">
-                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">Serviço</th>
-                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">Cidade</th>
-                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">Data e hora</th>
-                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">Duração</th>
-                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">Valor</th>
-                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">Urgente</th>
-                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">Ação</th>
+                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">
+                    Serviço
+                  </th>
+                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">
+                    Cidade
+                  </th>
+                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">
+                    Data e hora
+                  </th>
+                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">
+                    Duração
+                  </th>
+                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">
+                    Valor
+                  </th>
+                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">
+                    Urgente
+                  </th>
+                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">
+                    Ação
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {visibleJobs.map((job: JobRequest) => (
-                  <InterfaceComponent key={job.id} job={job} onAccept={accept} />
+                  <InterfaceComponent
+                    key={job.id}
+                    job={job}
+                    onAccept={accept}
+                  />
                 ))}
               </tbody>
             </table>
