@@ -1,5 +1,5 @@
-import type { JSX } from "react";
 import type { JobRequest } from "./dadosServicosComponent";
+
 
 type Props = {
   job: JobRequest;
@@ -40,10 +40,7 @@ const formatDuration: FormatDuration = (totalMinutes) => {
   return `${hours}h${String(minutes).padStart(2, "0")}`;
 };
 
-export default function InterfaceComponent({
-  job,
-  onAccept,
-}: Props): JSX.Element {
+export default function InterfaceComponent({ job, onAccept }: Props) {
   return (
     <tr className="hover:bg-slate-50 text-sm text-slate-800">
       <td className="p-4 border-b border-slate-200">{job.service}</td>
