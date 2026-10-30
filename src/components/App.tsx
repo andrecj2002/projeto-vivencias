@@ -56,28 +56,50 @@ export default function App() {
 
   if (loading) {
     return (
-      <main>
-        <p>A carregar...</p>
+      <main className="min-h-screen w-full flex items-center justify-center bg-gray-100">
+        <p className="text-gray-600">A carregar...</p>
       </main>
     );
   }
 
   return (
-    <main>
-      <FiltrarComponent
-        cities={cities}
-        selectedCity={selectedCity}
-        onChange={setSelectedCity}
-      />
-      {visibleJobs.length === 0 ? (
-        <p>{emptyMessage}</p>
-      ) : (
-        <ul>
-          {visibleJobs.map((job) => (
-            <InterfaceComponent key={job.id} job={job} onAccept={accept} />
-          ))}
-        </ul>
-      )}
+    <main className="min-h-screen w-full flex items-center justify-center bg-gray-100 p-8">
+      <div className="w-full max-w-5xl mx-auto bg-white rounded-xl shadow p-10">
+        <h1 className="text-3xl font-bold text-center mb-8">
+          Pedidos de serviço
+        </h1>
+
+        <FiltrarComponent
+          cities={cities}
+          selectedCity={selectedCity}
+          onChange={setSelectedCity}
+        />
+
+        {visibleJobs.length === 0 ? (
+          <p className="text-center text-gray-500 py-10">{emptyMessage}</p>
+        ) : (
+          <div className="overflow-x-auto rounded-lg shadow-md bg-white text-gray-700">
+            <table className="w-full text-left table-auto min-w-max">
+              <thead>
+                <tr className="text-sm font-normal leading-none text-slate-500">
+                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">Serviço</th>
+                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">Cidade</th>
+                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">Data e hora</th>
+                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">Duração</th>
+                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">Valor</th>
+                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">Urgente</th>
+                  <th className="p-4 border-b border-slate-300 bg-slate-50 font-normal">Ação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleJobs.map((job) => (
+                  <InterfaceComponent key={job.id} job={job} onAccept={accept} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </main>
   );
 }

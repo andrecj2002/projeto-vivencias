@@ -1,5 +1,6 @@
 import type { JobRequest } from "./dadosServicosComponent";
 
+
 type Props = {
   job: JobRequest;
   onAccept: (id: string) => void;
@@ -8,6 +9,7 @@ type Props = {
 type FormatPrice = (cents: number) => string;
 type FormatDateTime = (iso: string) => string;
 type FormatDuration = (totalMinutes: number) => string;
+
 
 // 4500 -> "45,00 €"
 const formatPrice: FormatPrice = (cents) => {
@@ -40,18 +42,38 @@ const formatDuration: FormatDuration = (totalMinutes) => {
 
 export default function InterfaceComponent({ job, onAccept }: Props) {
   return (
-    <li className="job-card">
-      <div className="job-header">
-        <h2>{job.service}</h2>
-        {job.urgent && <span className="badge">Urgente</span>}
-      </div>
-      <p>{job.city}</p>
-      <p>{formatDateTime(job.startsAt)}</p>
-      <p>Duração: {formatDuration(job.durationMin)}</p>
-      <p className="price">{formatPrice(job.priceCents)}</p>
-      <button type="button" onClick={() => onAccept(job.id)}>
-        Aceitar
-      </button>
-    </li>
+    <tr className="hover:bg-slate-50 text-sm text-slate-800">
+      <td className="p-4 border-b border-slate-200">{job.service}</td>
+      <td className="p-4 border-b border-slate-200">{job.city}</td>
+      <td className="p-4 border-b border-slate-200">
+        {formatDateTime(job.startsAt)}
+      </td>
+      <td className="p-4 border-b border-slate-200">
+        {formatDuration(job.durationMin)}
+      </td>
+      <td className="p-4 border-b border-slate-200 font-semibold whitespace-nowrap">
+        {formatPrice(job.priceCents)}
+      </td>
+      <td className="p-4 border-b border-slate-200">
+        <span
+          className={
+            job.urgent
+              ? "px-3 py-1 rounded-full text-xs bg-red-100 text-red-700"
+              : "px-3 py-1 rounded-full text-xs bg-slate-100 text-slate-600"
+          }
+        >
+          {job.urgent ? "Sim" : "Não"}
+        </span>
+      </td>
+      <td className="p-4 border-b border-slate-200">
+        <button
+          type="button"
+          onClick={() => onAccept(job.id)}
+          className="px-4 py-1.5 rounded bg-green-600 text-white hover:bg-green-700"
+        >
+          Aceitar
+        </button>
+      </td>
+    </tr>
   );
 }

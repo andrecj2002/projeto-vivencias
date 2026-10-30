@@ -10,12 +10,15 @@ export default function FiltrarComponent({
   onChange,
 }: Props) {
   return (
-    <div>
-      <label htmlFor="city">Cidade: </label>
+    <div className="mb-6">
+      <label htmlFor="city" className="mr-2 text-sm">
+        Cidade:
+      </label>
       <select
         id="city"
         value={selectedCity}
         onChange={(event) => onChange(event.target.value)}
+        className="border border-gray-300 rounded px-3 py-1.5 text-sm"
       >
         <option value="">Todas as cidades</option>
         {cities.map((city) => (
